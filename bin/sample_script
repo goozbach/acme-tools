@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#source the library
+_execdir=$(dirname $0)
+. ${_execdir}/../lib/sample_script.config
+. ${_execdir}/../etc/sample_script
+
+echo "this is a sample script"
+
+echo $MAIN_VAR
+
+
