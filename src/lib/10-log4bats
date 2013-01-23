@@ -5,8 +5,7 @@ _log_do_dispatch(){
 }
 
 _log_format(){
-  #_LOG_DATE=$(date -u ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} -d @${_LOG_STAMP})
-  _LOG_DATE=''
+  _LOG_DATE=$(date -u ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} -d @${_LOG_STAMP})
   _LOG_MESSAGE=$(printf ${LOG4BATS_FORMAT:-"${_LOG_DATE} ${_LOG_LVL} %b\n"} "$@")
   _log ${_LOG_MESSAGE}
 }
