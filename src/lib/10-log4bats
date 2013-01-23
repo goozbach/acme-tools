@@ -1,0 +1,132 @@
+#!/bin/bash
+_log_do_dispatch(){
+  #TODO make dispatcher docs
+  echo -e ${@}
+}
+
+_log_format(){
+  #_LOG_DATE=$(date -u ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} -d @${_LOG_STAMP})
+  _LOG_DATE=''
+  _LOG_MESSAGE=$(printf ${LOG4BATS_FORMAT:-"${_LOG_DATE} ${_LOG_LVL} %b\n"} "$@")
+  _log ${_LOG_MESSAGE}
+}
+  
+_log_dispatch(){
+  # only continues if the loglevel isn't squelching the log
+
+  LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-'TRACE'}
+
+  if [[ ${LOG4BATS_LEVEL} == 'TRACE' || ${LOG4BATS_LEVEL} == 'ALL' ]]
+  then
+    _log_do_dispatch ${_LOG_MESSAGE}
+  elif [[ ${LOG4BATS_LEVEL} == 'DEBUG' ]]
+  then
+    if [[ ${_LOG_LVL} =~ (DEBUG|INFO|WARN|ERROR|FATAL) ]]
+    then
+        _log_do_dispatch ${_LOG_MESSAGE}
+    fi 
+  elif [[ ${LOG4BATS_LEVEL} == 'INFO' ]]
+  then
+    if [[ ${_LOG_LVL} =~  (INFO|WARN|ERROR|FATAL) ]]
+    then
+        _log_do_dispatch ${_LOG_MESSAGE}
+    fi 
+  elif [[ ${LOG4BATS_LEVEL} == 'WARN' ]]
+  then
+    if [[ ${_LOG_LVL} =~ (WARN|ERROR|FATAL) ]]
+    then
+        _log_do_dispatch ${_LOG_MESSAGE}
+    fi 
+  elif [[ ${LOG4BATS_LEVEL} == 'ERROR' ]]
+  then
+    if [[ ${_LOG_LVL} =~ (ERROR|FATAL) ]]
+    then
+        _log_do_dispatch ${_LOG_MESSAGE}
+    fi 
+  elif [[ ${LOG4BATS_LEVEL} == 'FATAL' ]]
+  then
+    if [[ ${_LOG_LVL} =~ 'FATAL' ]]
+    then
+        _log_do_dispatch ${_LOG_MESSAGE}
+    fi 
+  elif [[ ${LOG4BATS_LEVEL} == 'DEBUG' ]]
+  then
+    return
+  fi
+}
+
+_log(){
+  # always sends message regardless of squelch level
+  _log_dispatch "$@"
+}
+
+log_fatal(){
+  _LOG_LVL="FATAL"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
+
+log_die(){
+  log_fatal "$@"
+  exit 200
+}
+
+log_error(){
+  _LOG_LVL="ERROR"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
+
+log_warn(){
+  _LOG_LVL="WARN"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
+
+log_info(){
+  _LOG_LVL="INFO"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
+
+log_debug(){
+  _LOG_LVL="DEBUG"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
+
+log_trace(){
+  _LOG_LVL="TRACE"
+  _LOG_FUNC=${FUNCNAME[1]}
+  _LOG_FILE=${BASH_SOURCE[1]}
+  _LOG_LINE=${BASH_LINENO[1]}
+  _LOG_SECONDS=${SECONDS}
+  _LOG_STAMP=$(date +%s.%N)
+  _log_format "$@"
+  unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
+}
