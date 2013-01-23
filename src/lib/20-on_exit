@@ -2,7 +2,6 @@
 #sig term/quit handler to umount what we've mounted
 # take from: http://www.linuxjournal.com/content/use-bash-trap-statement-cleanup-temporary-files
 declare -a on_exit_items
-on_exit_items=''
 function on_exit()
 {
     for i in "${on_exit_items[@]}"
@@ -17,7 +16,7 @@ function add_on_exit()
     local n=${#on_exit_items[*]}
     on_exit_items[$n]="$*"
     if [[ $n -eq 0 ]]; then
-        log_trace "add_on_exit called, setting on_exit trap"
+        log_debug "add_on_exit called, setting on_exit trap"
         trap on_exit EXIT
     fi
 }

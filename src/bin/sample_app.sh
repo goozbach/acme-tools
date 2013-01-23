@@ -30,7 +30,7 @@ log_info "this is a log4bats function (https://github.com/goozbach/log4bats)"
 # create a tempfile
 log_info "creating temp file"
 TMPFILE=$(mktemp /tmp/${0##*/}-XXXXXXX)
-add_on_exit 'rm -rf ${TMPFILE}'
+add_on_exit "rm -rf ${TMPFILE}"
 
 # this command will fail thanks to stringent.sh
 log_info "attempting to overwrite tmp file, this should fail"
