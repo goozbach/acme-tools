@@ -1,9 +1,27 @@
 #!/bin/bash
 
-#source the library
-_execdir=$(dirname $0)
-. ${_execdir}/../lib/sample_script.config
-. ${_execdir}/../etc/sample_script
+## where does this script live?
+SOURCE="${BASH_SOURCE[0]}"
+TOPLEVEL="$( dirname "${SOURCE}" )"
+while [ -h "${SOURCE}" ]
+do 
+  SOURCE="$(readlink "${SOURCE}")"
+  [[ ${SOURCE} != /* ]] && SOURCE="${TOPLEVEL}/${SOURCE}"
+  TOPLEVEL="$( cd -P "$( dirname "${SOURCE}"  )" && pwd )"
+done
+TOPLEVEL="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+
+# source functions
+for i in ${TOPLEVEL}/../lib/*
+do
+  source $i
+done
+
+# source configs
+for i in ${TOPLEVEL}/../etc/*
+do
+  source $i
+done
 
 echo "this is a sample script"
 
