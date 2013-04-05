@@ -1,4 +1,20 @@
 Various tools (scripts, aliases, functions, etc) for interacting with plan9port Acme.
+Simple BASH application framework.
 
-Need to have `stow` installed and stow into a location which is in at least the PLAN9 PATH.
+To install/update the contents run the folowing:
 
+    stow -vt /usr/local/ -R src/
+
+or just run 
+
+    make
+
+This is a "STOWABLE" structure. so the contents of things should be in src/ in the structure they should exist inside of the /usr/local directory.
+
+For more info read the stow manpage.
+
+This repository has some code from other projects
+
+on_exit: http://www.linuxjournal.com/content/use-bash-trap-statement-cleanup-temporary-files
+stringent.sh: https://github.com/goozbach/stringent.sh
+log4bats: https://github.com/goozbach/log4bats
