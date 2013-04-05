@@ -1,0 +1,28 @@
+_is_acme_running(){
+  if 9p ls acme &> /dev/null
+  then
+    return 0
+  else
+    return 100
+  fi
+}
+
+test_acme_running(){
+  if _is_acme_running
+  then
+    :
+  else
+    echo "Acme not running" 1>&2
+    exit 100
+  fi
+}
+
+acme_new_window(){
+  if _is_acme_running 
+  then
+    NEW_WIN_NUM=$(9p read acme/new/ctl | tr -s ' ' | cut -d ' ' -f 2)
+    echo ${NEW_WIN_NUM}
+  else
+    :
+  fi
+}

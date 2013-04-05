@@ -1,0 +1,4 @@
+Various tools (scripts, aliases, functions, etc) for interacting with plan9port Acme.
+
+Need to have `stow` installed and stow into a location which is in at least the PLAN9 PATH.
+

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+## where does this script live?
+SOURCE="${BASH_SOURCE[0]}"
+TOPLEVEL="$( dirname "${SOURCE}" )"
+while [ -h "${SOURCE}" ]
+do 
+  SOURCE="$(readlink "${SOURCE}")"
+  [[ ${SOURCE} != /* ]] && SOURCE="${TOPLEVEL}/${SOURCE}"
+  TOPLEVEL="$( cd -P "$( dirname "${SOURCE}"  )" && pwd )"
+done
+TOPLEVEL="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+
+# source functions
+for i in ${TOPLEVEL}/../lib/*
+do
+  source $i
+done
+
+# bail if acme not running
+test_acme_running
+
+if [[ -r $1 ]]
+then
+        plumb -s shell -d edit $1
+else
+        echo "Cannot access file $1" 1>&2
+        exit 2
+fi
