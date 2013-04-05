@@ -17,9 +17,6 @@ do
   source $i
 done
 
-# bail if acme not running
-test_acme_running
-
 if [[ -r $1 ]]
 then
         plumb -s shell -d edit $1
