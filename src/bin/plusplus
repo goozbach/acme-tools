@@ -17,14 +17,10 @@ do
   source $i
 done
 
-# source configs
-for i in ${TOPLEVEL}/../etc/*
-do
-  source $i
-done
-
-echo "this is a sample script"
-
-echo $MAIN_VAR
-
-
+MYNAME=${0##*/}
+if [[ -r ${TOPLEVEL}/../share/${MYNAME}.content ]]
+then
+  cat ${TOPLEVEL}/../share/${MYNAME}.content
+else
+  echo "No content file for ${MYNAME}" 1>&2
+fi
