@@ -16,11 +16,16 @@ for i in ${TOPLEVEL}/../lib/*
 do
   source $i
 done
+LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-INFO}
 
 MYNAME=${0##*/}
-if [[ -r ${TOPLEVEL}/../share/${MYNAME}.content ]]
+if [[ -r ${TOPLEVEL}/../share/plusplus/${MYNAME}.content ]]
 then
-  cat ${TOPLEVEL}/../share/${MYNAME}.content
+  sed '/_REPLACEME_/{
+    s/_REPLACEME_//g
+    r /dev/stdin
+  }'  ${TOPLEVEL}/../share/plusplus/${MYNAME}.content
 else
-  echo "No content file for ${MYNAME}" 1>&2
+  log_warn "No content file for ${MYNAME}" 1>&2
 fi
+

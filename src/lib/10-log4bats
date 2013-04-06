@@ -1,11 +1,32 @@
 #!/bin/bash
 _log_do_dispatch(){
   #TODO make dispatcher docs
-  echo -e ${@}
+  echo -e ${@} 1>&2
+}
+OSNAME=$(uname -s)
+
+_log_get_stamp(){
+  case ${OSNAME} in
+  Darwin)
+    echo $(date +%s)
+  ;;
+  *)
+    echo $(date +%s.%N)
+  ;;
+  esac
 }
 
 _log_format(){
-  _LOG_DATE=$(date -u ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} -d @${_LOG_STAMP})
+  case ${OSNAME} in
+  Darwin)
+    LOG4BATS_DATE_FORMAT="+%F-%T"
+    _LOG_DATE=$(date -ju -f %s ${_LOG_STAMP} ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} )
+  ;;
+  *)
+    LOG4BATS_DATE_FORMAT="+%F-%T.%N"
+    _LOG_DATE=$(date -u ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} -d ${_LOG_STAMP})
+  ;;
+  esac
   _LOG_MESSAGE=$(printf ${LOG4BATS_FORMAT:-"${_LOG_DATE} ${_LOG_LVL} %b\n"} "$@")
   _log ${_LOG_MESSAGE}
 }
@@ -65,7 +86,7 @@ log_fatal(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }
@@ -81,7 +102,7 @@ log_error(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }
@@ -92,7 +113,7 @@ log_warn(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }
@@ -103,7 +124,7 @@ log_info(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }
@@ -114,7 +135,7 @@ log_debug(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }
@@ -125,7 +146,7 @@ log_trace(){
   _LOG_FILE=${BASH_SOURCE[1]}
   _LOG_LINE=${BASH_LINENO[1]}
   _LOG_SECONDS=${SECONDS}
-  _LOG_STAMP=$(date +%s.%N)
+  _LOG_STAMP=$(_log_get_stamp)
   _log_format "$@"
   unset _LOG_LVL _LOG_FUNC _LOG_FILE _LOG_LINE _LOG_SECONDS _LOG_STAMP
 }

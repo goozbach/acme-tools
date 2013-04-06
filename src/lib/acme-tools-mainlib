@@ -26,3 +26,12 @@ acme_new_window(){
     :
   fi
 }
+
+_acme_mount_point(){
+  MNTPOINT=$(mktmp -d /tmp/${MYNAME}-namespace-XXXXX)
+  mkdir ${MNTPOINT}/acme
+  9pfuse `namespace`/acme ${MNTPOINT}/acme
+  umount ${MNTPOINT}/acme
+  add_on_exit rmdir ${MNTPOINT}/acme
+  add_on_exit rmdir ${MNTPOINT}
+}
