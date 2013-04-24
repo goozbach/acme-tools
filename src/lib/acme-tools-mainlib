@@ -35,3 +35,8 @@ _acme_mount_point(){
   add_on_exit rmdir ${MNTPOINT}/acme
   add_on_exit rmdir ${MNTPOINT}
 }
+
+acme_put_window(){
+  log_info "\nSaving file"
+  echo put | 9p write acme/$winid/ctl
+}
