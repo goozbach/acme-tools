@@ -1,0 +1,30 @@
+#!/bin/bash
+
+## where does this script live?
+SOURCE="${BASH_SOURCE[0]}"
+TOPLEVEL="$( dirname "${SOURCE}" )"
+while [ -h "${SOURCE}" ]
+do 
+  SOURCE="$(readlink "${SOURCE}")"
+  [[ ${SOURCE} != /* ]] && SOURCE="${TOPLEVEL}/${SOURCE}"
+  TOPLEVEL="$( cd -P "$( dirname "${SOURCE}"  )" && pwd )"
+done
+TOPLEVEL="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+
+# source functions
+for i in ${TOPLEVEL}/../lib/*
+do
+  source $i
+done
+LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-INFO}
+
+test_acme_running
+
+acme_put_window
+
+if lexillusion ${samfile} 1>&2
+then
+  log_info "no lexical illusions found"
+else
+  exit 0
+fi
