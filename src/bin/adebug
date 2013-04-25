@@ -21,4 +21,5 @@ LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-INFO}
 test_acme_running
 
 log_info "winid=$winid"
-
+log_info "PATH=$PATH"
+log_info "PWD=$(pwd)"

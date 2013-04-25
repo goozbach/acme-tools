@@ -40,3 +40,8 @@ acme_put_window(){
   log_info "\nSaving file"
   echo put | 9p write acme/$winid/ctl
 }
+
+acme_clear_tag(){
+  log_info "clearing tag on window $winid"
+  echo cleartag | 9p write acme/$winid/ctl
+}
