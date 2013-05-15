@@ -23,10 +23,10 @@ test_acme_running
 
 acme_clear_tag
 
-log_info "samfile: $samfile"
+log_debug "samfile: $samfile"
 
 STARTDIR=$(dirname $samfile)
-log_info "STARTDIR: $STARTDIR"
+log_debug "STARTDIR: $STARTDIR"
 
 #settag subroutine, reads file passed in, and sets the tag to it.
 acme_settag(){
@@ -36,7 +36,7 @@ acme_settag(){
   then 
     LEADER=' '
   fi
-  echo "${LEADER}${NEWTAG}" | 9p write acme/$winid/tag
+  echo -n "${LEADER}${NEWTAG}" | 9p write acme/$winid/tag
 }
 
 # start on STARTDIR, look four levels up for .acmetag, then ~/.acmetag then /etc/acmetag

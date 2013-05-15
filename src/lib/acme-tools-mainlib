@@ -42,6 +42,6 @@ acme_put_window(){
 }
 
 acme_clear_tag(){
-  log_info "clearing tag on window $winid"
+  log_debug "clearing tag on window $winid"
   echo cleartag | 9p write acme/$winid/ctl
 }
