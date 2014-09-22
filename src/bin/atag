@@ -16,7 +16,7 @@ for i in ${TOPLEVEL}/../lib/*
 do
   source $i
 done
-LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-INFO}
+LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-WARN}
 TAGFILE=acmetag
 
 test_acme_running

@@ -19,7 +19,7 @@ done
 
 if [[ -r $1 ]]
 then
-        plumb -s shell -d edit $1
+        9 plumb -s shell -d edit $1
 else
         echo "Cannot access file $1" 1>&2
         exit 2

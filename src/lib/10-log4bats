@@ -8,7 +8,7 @@ OSNAME=$(uname -s)
 _log_get_stamp(){
   case ${OSNAME} in
   Darwin)
-    echo $(date +%s)
+    echo $(/bin/date +%s)
   ;;
   *)
     echo $(date +%s.%N)
@@ -20,7 +20,7 @@ _log_format(){
   case ${OSNAME} in
   Darwin)
     LOG4BATS_DATE_FORMAT="+%F-%T"
-    _LOG_DATE=$(date -ju -f %s ${_LOG_STAMP} ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} )
+      _LOG_DATE=$(/bin/date -ju -f %s ${_LOG_STAMP} ${LOG4BATS_DATE_FORMAT:-"+%F-%T.%N"} )
   ;;
   *)
     LOG4BATS_DATE_FORMAT="+%F-%T.%N"
