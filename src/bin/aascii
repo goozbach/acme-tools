@@ -1,0 +1,40 @@
+#!/bin/bash
+
+## where does this script live?
+SOURCE="${BASH_SOURCE[0]}"
+TOPLEVEL="$( dirname "${SOURCE}" )"
+while [ -h "${SOURCE}" ]
+do 
+  SOURCE="$(readlink "${SOURCE}")"
+  [[ ${SOURCE} != /* ]] && SOURCE="${TOPLEVEL}/${SOURCE}"
+  TOPLEVEL="$( cd -P "$( dirname "${SOURCE}"  )" && pwd )"
+done
+TOPLEVEL="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+
+# source functions
+for i in ${TOPLEVEL}/../lib/*
+do
+  source $i
+done
+LOG4BATS_LEVEL=${LOG4BATS_LEVEL:-INFO}
+TAGFILE=run
+
+test_acme_running
+
+log_info "Running aascii"
+sleep 1
+
+log_debug "samfile: ${samfile:?"Unable to determine samfile."}"
+
+lockfile -3 -r2 ${TMPDIR}/acme-aascii-${winid}	
+
+add_on_exit "rm -rf -- ${TMPDIR}/acme-aascii-${winid}"
+
+STARTDIR=$(dirname $samfile)
+log_debug "STARTDIR: $STARTDIR"
+
+acme_put_window
+
+log_info "running asciidoctor on $samfile"
+
+asciidoctor $samfile
