@@ -21,8 +21,7 @@ TAGFILE=run
 
 test_acme_running
 
-log_info "Running aascii"
-sleep 1
+log_debug "Running aascii"
 
 log_debug "samfile: ${samfile:?"Unable to determine samfile."}"
 
